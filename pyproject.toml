@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "graphed-numpy"
+version = "0.0.1"
+description = "Trivial numpy backend for graphed, proving the backend seam"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "graphed-org" }]
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+# graphed + graphed-core are installed from their repos (see CI / CONTRIBUTING); not on PyPI yet.
+dependencies = ["graphed", "graphed-core", "numpy>=1.24"]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "hypothesis", "mypy", "ruff"]
+docs = ["sphinx", "furo"]
+
+[project.urls]
+Homepage = "https://github.com/graphed-org/graphed-numpy"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/graphed_numpy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.coverage.run]
+branch = true
+source = ["graphed_numpy"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+
+[tool.ruff]
+line-length = 110
+src = ["src", "tests"]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
+
+# numpy's typed stubs fight --strict at the array-interop boundary; treat numpy as untyped there
+# and don't force our numpy-returning helpers to satisfy strict return typing (documented friction).
+[[tool.mypy.overrides]]
+module = ["numpy.*"]
+ignore_missing_imports = true
+follow_imports = "skip"
+
+[[tool.mypy.overrides]]
+module = ["graphed_numpy"]
+warn_return_any = false
