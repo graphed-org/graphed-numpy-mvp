@@ -31,3 +31,12 @@ numpy "bags": elementwise arithmetic, boolean `filter`, `sum` reduction, and opa
 `pytest tests/frozen/m2 --cov=graphed_numpy` (100%) · `sphinx -W`.
 
 Status: see `.graphed/state.json`.
+
+## M5 additions (necessary-buffer projection)
+
+- `from_record(session, name, **columns)` — a record source with named columns (the projection
+  target); the `field` op reads a column. Arithmetic now also handles `array OP scalar`.
+- `graphed_numpy.project(array, *, on_fail)` — a **genuine** column projection (not trivial
+  all-inputs): replays the computation on field-touch tracers, reporting only the columns each
+  source actually reads. Opaque `map` honors the on-fail policy. **Over-touch protected**
+  (tests/frozen/m5/test_no_overtouch.py): reading one field of a record reads ONLY that field.

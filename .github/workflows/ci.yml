@@ -42,7 +42,7 @@ jobs:
       - name: Mypy (strict)
         run: mypy
       - name: Pytest + coverage gate (>=90%)
-        run: pytest tests/frozen/m2 --cov=graphed_numpy --cov-branch --cov-report=term-missing
+        run: pytest tests/frozen --cov=graphed_numpy --cov-branch --cov-report=term-missing
 
   docs:
     name: docs (sphinx -W)
