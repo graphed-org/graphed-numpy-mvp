@@ -24,7 +24,7 @@ dev = ["pytest", "pytest-cov", "hypothesis", "mypy", "ruff"]
 docs = ["sphinx", "furo"]
 
 [project.urls]
-Homepage = "https://github.com/graphed-org/graphed-numpy"
+Homepage = "https://github.com/graphed-org/graphed-numpy-mvp"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/graphed_numpy"]
