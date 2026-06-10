@@ -21,3 +21,12 @@
   caught it).
 - gates: frozen_tests 333/333 PASS · coverage 95% (>=90, branch) · ruff+format clean ·
   mypy --strict clean · determinism green (frozen IR byte-equality test) · sphinx -W clean.
+
+## Iteration 2 — IMPLEMENTING — 2026-06-10 (CI finding)
+
+- Remote CI failed on EVERY matrix cell while the local suite was green: pyarrow's
+  ChunkedArray.to_numpy AND DataType.to_pandas_dtype route through pyarrow's pandas SHIM —
+  pandas is not a dependency of this package, but the shared dev venv (a sibling repo's deps)
+  masked it locally. Fixed pandas-free: column conversion via combine_chunks().to_numpy(), schema
+  translation via an explicit arrow-name -> numpy-dtype map. tests/extra/m15/test_pandas_free.py
+  re-runs the whole parquet path with pandas imports BLOCKED so the masking cannot recur.
